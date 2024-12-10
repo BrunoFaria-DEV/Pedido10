@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Pedido10.Domain.Dto
+﻿namespace Pedido10.Domain.Dto
 {
     public class UsuarioDto
     {
+        public int ID_Usuario { get; set; } = 0;
+        public string Nome { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Senha { get; set; } = string.Empty;
+        public char? Plano_Usuario { get; set; }
+        public char? Status { get; set; }
     }
 }

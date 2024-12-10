@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Pedido10.Data\Pedido10.Data.csproj" />
+  </ItemGroup>
+
 </Project>
