@@ -33,6 +33,5 @@ namespace Pedido10.API.Controllers
             return Ok(dto);
         }
 
-
     }
 }
