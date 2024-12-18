@@ -8,6 +8,32 @@ namespace Pedido10.Data.Repository
 {
     public class UsuarioRepository : IUsuarioRepository
     {
+        public async Task<List<Usuario>> GetAll()
+        {
+            var path = Path.Combine("..", "Pedido10.Data", "Script", "Usuario", "GetAllUsuario.sql");
+
+            var response = await Proxy.ReaderAsync(path);
+
+            List<Usuario> usuarios = new List<Usuario>();
+
+            if (response.Tables.Count > 0 && response.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow row in response.Tables[0].Rows)
+                {
+                    usuarios.Add(new Usuario()
+                    {
+                        ID_Usuario = row.Field<int>("ID_Usuario"),
+                        Nome = row.Field<string>("Nome"),
+                        Email = row.Field<string>("Email"),
+                        Plano_Usuario = row.Field<string>("Plano_Usuario")[0], // erro de conversão, mesmo no banco sendo char(1)
+                        Status = row.Field<string>("Status")[0],
+                    });
+                }
+            }
+
+            return usuarios;
+        }
+
         public async Task<bool> Add(Usuario usuario)
         {
             var path = Path.Combine("..", "Pedido10.Data", "Script", "Usuario", "AddUsuario.sql");
@@ -43,8 +69,8 @@ namespace Pedido10.Data.Repository
                     Nome = row.Field<string>("Nome"),
                     Email = row.Field<string>("Email"),
                     Senha = row.Field<string>("Senha"),
-                    Plano_Usuario = row.Field<char>("Plano_Usuario"),
-                    Status = row.Field<char>("Status"),
+                    Plano_Usuario = row.Field<string>("Plano_Usuario")[0],
+                    Status = row.Field<string>("Status")[0],
                 };
             }
 
@@ -69,8 +95,8 @@ namespace Pedido10.Data.Repository
                     Nome = row.Field<string>("Nome"),
                     Email = row.Field<string>("Email"),
                     Senha = row.Field<string>("Senha"),
-                    Plano_Usuario = row.Field<char>("Plano_Usuario"),
-                    Status = row.Field<char>("Status"),
+                    Plano_Usuario = row.Field<string>("Plano_Usuario")[0],
+                    Status = row.Field<string?>("Status")[0],
                 };
             }
 

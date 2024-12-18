@@ -10,6 +10,28 @@ namespace Pedido10.Application.Service
     public class UsuarioService(IUsuarioRepository usuarioRepository) : IUsuarioService
     {
         private readonly IUsuarioRepository _usuarioRepository = usuarioRepository;
+
+        public async Task<List<UsuarioDto>> GetAll()
+        {
+            var usuarios = await _usuarioRepository.GetAll();
+
+            List<UsuarioDto> usuariosDto = [];
+
+            foreach (var usuario in usuarios) 
+            {
+                usuariosDto.Add(new UsuarioDto()
+                {
+                    ID_Usuario = usuario.ID_Usuario,
+                    Nome = usuario.Nome,
+                    Email = usuario.Email,
+                    Plano_Usuario = usuario.Plano_Usuario,
+                    Status = usuario.Status,
+                });
+            }
+
+            return usuariosDto;
+        }
+
         public async Task<bool> Add(UsuarioDto dto)
         {
             var retorno = false;
@@ -29,7 +51,7 @@ namespace Pedido10.Application.Service
 
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(dto.Senha);
             string senhaBase64 = Convert.ToBase64String(bytes);
-            var usuario = new Usuario(dto.Nome, dto.Email, senhaBase64);
+            var usuario = new Usuario(dto.Nome, dto.Email, senhaBase64, dto.Plano_Usuario, dto.Status);
 
             retorno = await _usuarioRepository.Add(usuario);
 

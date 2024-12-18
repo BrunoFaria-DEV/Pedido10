@@ -5,8 +5,9 @@ namespace Pedido10.Application.Contract
 {
     public interface IUsuarioService
     {
-        Task<bool> Add(UsuarioDto dto);
+        Task<List<UsuarioDto>> GetAll();
         Task<UsuarioDto> Find(int id);
+        Task<bool> Add(UsuarioDto dto);
         Task<bool> Update(int usuarioId, UsuarioDto dto);
     }
 }

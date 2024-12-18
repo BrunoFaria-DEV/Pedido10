@@ -5,12 +5,12 @@ namespace Pedido10.Data.Contract
 {
     public interface IUsuarioRepository
     {
+        Task<List<Usuario>> GetAll();
         Task<bool> Add(Usuario dto);
         Task<Usuario> Find(int id);
         Task<Usuario> FindByEmail(string email);
         Task<bool> Update(Usuario usuario);
 
-        // a Entidade Paginação é uma tabela também?
-        //Task<List<UsuarioDto>> Paginacao(Paginacao paginacao);
+        //Task<List<UsuarioDto>> Paginacao(Paginacao paginacao); // estudo posterior
     }
 }

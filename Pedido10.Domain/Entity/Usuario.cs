@@ -7,13 +7,13 @@ namespace Pedido10.Domain.Entity
     {
         public Usuario(){}
 
-        public Usuario(string nome, string email, string senha)
+        public Usuario(string nome, string email, string senha, char? planoUsuario, char? status)
         {
             Nome = nome;
             Email = email;
             Senha = senha;
-            Plano_Usuario = 'D';
-            Status = 'A';
+            Plano_Usuario = planoUsuario ?? 'D';
+            Status = status ?? 'D';
         }
 
         public int ID_Usuario { get; set; }
@@ -27,10 +27,8 @@ namespace Pedido10.Domain.Entity
         [MaxLength(100)]
         public string Senha { get; set; } = string.Empty;
 
-        [MaxLength(1)]
         public char? Plano_Usuario { get; set; }
-
-        [MaxLength(1)]
+        
         public char? Status { get; set; }
 
         public void AtualizarAtributos(UsuarioDto usuarioDto)
