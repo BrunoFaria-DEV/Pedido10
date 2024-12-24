@@ -2,6 +2,7 @@
 using Pedido10.Domain.Dto;
 using Pedido10.Domain.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Pedido10.API.Controllers
 {
@@ -11,6 +12,22 @@ namespace Pedido10.API.Controllers
     {
         private readonly IUsuarioService _usuarioService = usuarioService;
 
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] UsuarioDto usuarioDto, [FromServices] IAuthService authService)
+        {
+            var usuario = await _usuarioService.Login(usuarioDto);
+
+            //if (usuario == null)
+            //{
+            //    return
+            //}
+
+            var token = authService.GenerateJwtToken(usuario);
+            return Ok(new { Token = token });
+        }
+
+        [Authorize]
         [HttpGet]
         [Route("all")]
         public async Task<IActionResult> GetAll()
@@ -19,12 +36,6 @@ namespace Pedido10.API.Controllers
 
             return Ok(usuarios);
         }
-
-        //[HttpGet("{id:int}")]
-        //public IActionResult Get([FromQuery]UsuarioDto teste) {
-        //    var testecompleto = teste;
-        //    return Ok(testecompleto);
-        //}
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]UsuarioDto dto)

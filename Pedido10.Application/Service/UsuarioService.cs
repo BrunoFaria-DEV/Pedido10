@@ -11,6 +11,24 @@ namespace Pedido10.Application.Service
     {
         private readonly IUsuarioRepository _usuarioRepository = usuarioRepository;
 
+        public async Task<UsuarioDto?> Login(UsuarioDto usuarioDto)
+        {
+            var usuario = await _usuarioRepository.FindByEmail(usuarioDto.Email);
+            if (usuario == null) return null;
+
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(usuarioDto.Senha);
+            string senhaBase64 = Convert.ToBase64String(bytes);
+            if (usuario.Senha == senhaBase64)
+            {
+                return new UsuarioDto()
+                {
+                    Nome = usuario.Nome,
+                    Email = usuario.Email
+                };
+            }
+            return null;
+        }
+
         public async Task<List<UsuarioDto>> GetAll()
         {
             var usuarios = await _usuarioRepository.GetAll();

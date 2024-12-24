@@ -7,9 +7,9 @@ namespace Pedido10.Domain.Entity
     {
         public Usuario(){}
 
-        public Usuario(string nome, string email, string senha, char? planoUsuario, char? status)
+        public Usuario(string? nome, string email, string senha, char? planoUsuario, char? status)
         {
-            Nome = nome;
+            Nome = nome ?? "";
             Email = email;
             Senha = senha;
             Plano_Usuario = planoUsuario ?? 'D';
