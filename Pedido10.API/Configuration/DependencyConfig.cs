@@ -1,5 +1,7 @@
 ﻿using Pedido10.Application.Contract;
+using Pedido10.Application.Contract.Auth;
 using Pedido10.Application.Service;
+using Pedido10.Application.Service.Auth;
 using Pedido10.Data.Contract;
 using Pedido10.Data.Repository;
 using System.Runtime.CompilerServices;

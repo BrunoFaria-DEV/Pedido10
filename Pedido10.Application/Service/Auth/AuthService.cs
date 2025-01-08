@@ -1,17 +1,17 @@
-﻿using Pedido10.Application.Contract;
-using Pedido10.Domain.Dto;
+﻿using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.Extensions.Options;
+using Pedido10.Domain.Dto;
+using Pedido10.Application.Contract.Auth;
+using Pedido10.Shared.Options;
 
-namespace Pedido10.Application.Service
+namespace Pedido10.Application.Service.Auth
 {
-    public class AuthService : IAuthService
+    public class AuthService(IOptions<JwtOptions> jwtOptions) : IAuthService
     {
-        private readonly string _key = "Pedido10KeyExampleComPeloMenos32caracteres";
-        private readonly string _issuer = "Pedido10.API";
-        private readonly string _audience = "Pedido10.Front";
+        private readonly JwtOptions _jtwOptions = jwtOptions.Value;
 
         public string GenerateJwtToken(UsuarioDto usuarioDto)
         {
@@ -19,15 +19,15 @@ namespace Pedido10.Application.Service
             {
                 new Claim(JwtRegisteredClaimNames.Sub, usuarioDto.ID_Usuario.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, usuarioDto.Email),
-                new Claim(ClaimTypes.Role, "Usuario") // Exemplo: papel do usuário
+                new Claim(ClaimTypes.Role, "Usuario")
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jtwOptions.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: _issuer,
-                audience: _audience,
+                issuer: _jtwOptions.Issuer,
+                audience: _jtwOptions.Audience,
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds

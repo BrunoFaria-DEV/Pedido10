@@ -3,6 +3,9 @@ using Pedido10.Domain.Dto;
 using Pedido10.Domain.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Pedido10.Application.Contract.Auth;
+using Pedido10.API.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Pedido10.API.Controllers
 {
@@ -18,12 +21,8 @@ namespace Pedido10.API.Controllers
         {
             var usuario = await _usuarioService.Login(usuarioDto);
 
-            //if (usuario == null)
-            //{
-            //    return
-            //}
-
             var token = authService.GenerateJwtToken(usuario);
+
             return Ok(new { Token = token });
         }
 

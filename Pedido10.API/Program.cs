@@ -2,11 +2,15 @@ using Pedido10.API.Configuration;
 using Pedido10.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Pedido10.Application.Service.Auth;
+using Pedido10.Shared.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Enviroment Variables
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JWT"));
 
 // Add services to the container.
 builder.Services.AddControllers()
@@ -25,9 +29,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["jwt:issuer"],
-            ValidAudience = builder.Configuration["jwt:audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["jwt:key"]))
+            ValidIssuer = builder.Configuration["JWT:issuer"],
+            ValidAudience = builder.Configuration["JWT:audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:key"]))
         };
     });
 
@@ -70,6 +74,7 @@ app.UseHttpsRedirection();
 // enable cors
 app.UseCors("AllowAny");
 
+//LOG DE IDENTIFICAÇÃO DE CHAVE JWT
 app.Use(async (context, next) =>
 {
     var token = context.Request.Headers["Authorization"];
@@ -81,7 +86,6 @@ app.Use(async (context, next) =>
 app.UseAuthentication(); // FIRST THAN AUTHORIZATION
 // AUTHORIZATION
 app.UseAuthorization();
-
 
 app.MapControllers();
 
