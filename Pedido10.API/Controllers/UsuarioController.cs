@@ -21,9 +21,14 @@ namespace Pedido10.API.Controllers
         {
             var usuario = await _usuarioService.Login(usuarioDto);
 
+            if (usuario == null)
+            {
+                return Unauthorized(new { sucesso = false, mensagem = "Usuario ou senha inválidos." });
+            }
+
             var token = authService.GenerateJwtToken(usuario);
 
-            return Ok(new { Token = token });
+            return Ok(new { sucesso = true, token = token, usuario = usuario });
         }
 
         [Authorize]
@@ -33,7 +38,7 @@ namespace Pedido10.API.Controllers
         {
             var usuarios = await _usuarioService.GetAll();
 
-            return Ok(usuarios);
+            return Ok(new { sucesso = true, usuarios });
         }
 
         [HttpPost]

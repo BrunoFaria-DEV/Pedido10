@@ -22,6 +22,7 @@ namespace Pedido10.Application.Service
             {
                 return new UsuarioDto()
                 {
+                    ID_Usuario = usuario.ID_Usuario,
                     Nome = usuario.Nome,
                     Email = usuario.Email
                 };
