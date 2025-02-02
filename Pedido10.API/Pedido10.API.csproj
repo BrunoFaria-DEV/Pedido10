@@ -20,10 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Pedido10.Application\Pedido10.Application.csproj" />
     <ProjectReference Include="..\Pedido10.Data\Pedido10.Data.csproj" />
     <ProjectReference Include="..\Pedido10.Shared\Pedido10.Shared.csproj" />

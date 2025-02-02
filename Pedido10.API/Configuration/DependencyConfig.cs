@@ -12,9 +12,11 @@ namespace Pedido10.API.Configuration
     {
         public static void RegisterConfig(this IServiceCollection service)
         {
-            service.AddScoped<IUsuarioRepository, UsuarioRepository>();
-            service.AddScoped<IUsuarioService, UsuarioService>();
             service.AddScoped<IAuthService, AuthService>();
+            service.AddScoped<IUsuarioService, UsuarioService>();
+            service.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            service.AddScoped<IClienteService, ClienteService>();
+            service.AddScoped<IClienteRepository, ClienteRepository>();
         }
     }
 }

@@ -6,6 +6,7 @@ using Pedido10.Application.Service.Auth;
 using Pedido10.Shared.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Pedido10.Data.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +44,9 @@ builder.Services.RegisterConfig();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSwaggerGen();
+
+// Add DbContext
+builder.Services.AddDbContext<Pedido10Context>();
 
 // cors
 builder.Services.AddCors(options =>
