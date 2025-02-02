@@ -16,6 +16,7 @@ namespace Pedido10.Data.Context
 
         //public DbSet<Usuario> Usuarios => Set<Usuario>();
         public DbSet<Cliente> Cliente => Set<Cliente>();
+        public DbSet<Produto> Produto => Set<Produto>();
 
     }
 }

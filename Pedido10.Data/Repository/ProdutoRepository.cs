@@ -5,41 +5,38 @@ using Pedido10.Domain.Entity;
 
 namespace Pedido10.Data.Repository
 {
-    public class ClienteRepository : IClienteRepository
+    public class ProdutoRepository : IProdutoRepository
     {
         private readonly Pedido10Context _context;
 
-        public ClienteRepository(Pedido10Context context)
-        {
+        public ProdutoRepository(Pedido10Context context) 
+        { 
             _context = context;
         }
 
-        public async Task<List<Cliente>> GetAll()
+        public async Task<List<Produto>> GetAll()
         {
-            var clientes = await _context.Cliente.ToListAsync();
-
-            return clientes;
+            var produtos = await _context.Produto.ToListAsync();
+            return produtos;
         }
 
-        public async Task<Cliente> Find(int id)
+        public async Task<Produto> Find(int id)
         {
-            var cliente = await _context.Cliente.FindAsync(id);
-
-            return cliente;
+            var produto = await _context.Produto.FindAsync(id);
+            return produto;
         }
 
-        public async Task<Cliente> FindByEmail(string email)
+        public async Task<Produto> FindByName(string nome)
         {
-            var cliente = await _context.Cliente.SingleOrDefaultAsync(Cliente => Cliente.Email == email);
-
-            return cliente;
+            var produto = await _context.Produto.SingleOrDefaultAsync(cliente => cliente.Nome_Produto == nome);
+            return produto;
         }
 
-        public async Task<bool> Add(Cliente cliente)
+        public async Task<bool> Add(Produto produto)
         {
             try
             {
-                _context.Cliente.Add(cliente);
+                _context.Produto.Add(produto);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -50,11 +47,11 @@ namespace Pedido10.Data.Repository
             return true;
         }
 
-        public async Task<bool> Update(Cliente cliente)
+        public async Task<bool> Update(Produto produto)
         {
             try
             {
-                _context.Cliente.Update(cliente);
+                _context.Produto.Update(produto);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -65,11 +62,11 @@ namespace Pedido10.Data.Repository
             return true;
         }
 
-        public async Task<bool> Delete(Cliente cliente)
+        public async Task<bool> Delete(Produto produto)
         {
             try
             {
-                _context.Cliente.Remove(cliente);
+                _context.Produto.Remove(produto);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
