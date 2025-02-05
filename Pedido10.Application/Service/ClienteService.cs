@@ -103,7 +103,7 @@ namespace Pedido10.Application.Service
 
             if (addResult != true)
             {
-                return new OperationResultGeneric<ClienteDto> { Success = false, Message = "O Cliente não foi encontrado." };
+                return new OperationResultGeneric<ClienteDto> { Success = false, Message = "O Cliente não foi adicionado." };
             }
 
             var ClienteDtoAtualizado = new ClienteDto()

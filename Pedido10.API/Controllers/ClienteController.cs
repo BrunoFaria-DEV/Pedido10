@@ -24,10 +24,10 @@ namespace Pedido10.API.Controllers
             var clientes = await _clienteService.GetAll();
             if (clientes == null || clientes.Count == 0)  //list.Any() ou list.Count verificam objetos como listas
             {
-                return NotFound();
+                return NotFound(new { resultado = "Nenhum Cliente Cadastrado" });
             }
 
-            return Ok( new { clientes } );
+            return Ok(new { sucesses = true, message = "Clientes encontrados", result = clientes });
         }
 
         [HttpGet("{id}")]
