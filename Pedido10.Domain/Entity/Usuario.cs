@@ -16,7 +16,8 @@ namespace Pedido10.Domain.Entity
             Status = status ?? 'D';
         }
 
-        public int ID_Usuario { get; set; }
+        [Key]
+        public int? ID_Usuario { get; set; }
 
         [MaxLength(120)]
         public string Nome { get; set; } = string.Empty;
@@ -26,10 +27,12 @@ namespace Pedido10.Domain.Entity
 
         [MaxLength(100)]
         public string Senha { get; set; } = string.Empty;
-
-        public char? Plano_Usuario { get; set; }
-        
-        public char? Status { get; set; }
+        [MaxLength(1)]
+        public char Plano_Usuario { get; set; } = 'A';
+        [MaxLength(1)]
+        public char Status { get; set; } = 'A';
+        [MaxLength(14)]
+        public string Tipo_Usuario { get; set; } = "usuario";
 
         public void AtualizarAtributos(UsuarioDto usuarioDto)
         {

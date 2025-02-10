@@ -6,6 +6,8 @@ using Pedido10.Application.Service;
 using Pedido10.Application.Contract;
 using Pedido10.Domain.Dto;
 using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
+using Pedido10.Application.Validator;
 
 namespace Pedido10.API.Controllers
 {
@@ -61,11 +63,19 @@ namespace Pedido10.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] ProdutoDto produtoDto)
+        public async Task<IActionResult> Add(CreateProdutoValidator validator, [FromBody] ProdutoDto produtoDto)
         {
-            if (produtoDto == null)
+            var validateResult = await validator.ValidateAsync(produtoDto);
+            //var error = validateResult.Errors.Select(e => e.ErrorMessage);
+            var errors = validateResult.Errors
+            .GroupBy(e => e.PropertyName)  // Agrupa os erros pelo nome do campo
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(e => e.ErrorMessage).ToList()
+            );
+            if (!validateResult.IsValid)
             {
-                return BadRequest();
+                return BadRequest( new { errors } );
             }
 
             var produto = await _produtoService.Add(produtoDto);
@@ -78,12 +88,22 @@ namespace Pedido10.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] ProdutoDto produtoDto)
+        public async Task<IActionResult> Update(UpdateProdutoValidator validator, int id, [FromBody] ProdutoDto produtoDto)
         {
-            if (produtoDto == null)
+            produtoDto.ID_Produto = id;
+            var validateResult = await validator.ValidateAsync(produtoDto);
+            //var errors = validateResult.Errors.Select(e => e.ErrorMessage);
+            var errors = validateResult.Errors
+            .GroupBy(e => e.PropertyName)  // Agrupa os erros pelo nome do campo
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(e => e.ErrorMessage).ToList()
+            );
+            if (!validateResult.IsValid)
             {
-                return BadRequest();
+                return BadRequest( new { errors } );
             }
+            produtoDto.ID_Produto = null; // usado até conseguir inserir outro parametro como o id no validator
 
             var produto = await _produtoService.Update(id, produtoDto);
             if (produto.Success != true)

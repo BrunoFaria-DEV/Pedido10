@@ -150,7 +150,7 @@ namespace Pedido10.Application.Service
             cliente.Endereco = clienteDto.Endereco ?? cliente.Endereco;
             cliente.Localizador = clienteDto.Localizador ?? cliente.Localizador;
             // buscar cidade para não ter erros
-            cliente.ID_Cidade = clienteDto.ID_Cidade ?? cliente.ID_Cidade;
+            cliente.ID_Cidade = clienteDto.ID_Cidade;
 
             var updateResult = await _clienteRepository.Update(cliente);
             if (updateResult != true)

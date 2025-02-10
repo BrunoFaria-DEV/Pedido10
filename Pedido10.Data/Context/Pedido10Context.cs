@@ -8,15 +8,15 @@ namespace Pedido10.Data.Context
 
         public Pedido10Context(DbContextOptions<Pedido10Context> options) : base(options) { }
 
+        public DbSet<Usuario> Usuario => Set<Usuario>();
+        public DbSet<Cliente> Cliente => Set<Cliente>();
+        public DbSet<Produto> Produto => Set<Produto>();
+        public DbSet<Forma_PGTO> Forma_PGTO => Set<Forma_PGTO>();
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql(Utils.StringConnection);
         }
-
-
-        //public DbSet<Usuario> Usuarios => Set<Usuario>();
-        public DbSet<Cliente> Cliente => Set<Cliente>();
-        public DbSet<Produto> Produto => Set<Produto>();
 
     }
 }

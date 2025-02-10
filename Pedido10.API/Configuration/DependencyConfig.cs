@@ -1,9 +1,12 @@
-﻿using Pedido10.Application.Contract;
+﻿using FluentValidation;
+using Pedido10.Application.Contract;
 using Pedido10.Application.Contract.Auth;
 using Pedido10.Application.Service;
 using Pedido10.Application.Service.Auth;
+using Pedido10.Application.Validator;
 using Pedido10.Data.Contract;
 using Pedido10.Data.Repository;
+using Pedido10.Domain.Entity;
 using System.Runtime.CompilerServices;
 
 namespace Pedido10.API.Configuration
@@ -12,6 +15,7 @@ namespace Pedido10.API.Configuration
     {
         public static void RegisterConfig(this IServiceCollection service)
         {
+            //service.AddScoped<CreateUsuarioValidator>();
             service.AddScoped<IAuthService, AuthService>();
             service.AddScoped<IUsuarioService, UsuarioService>();
             service.AddScoped<IUsuarioRepository, UsuarioRepository>();

@@ -25,10 +25,11 @@ namespace Pedido10.Domain.Entity
         public string Nome_Produto { get; set; }
         [MaxLength(150)]
         public string? Descricao { get; set; }
-        //[Precision(7, 2)]
         [Column(TypeName = "decimal(7, 2)")]
         public decimal? Custo_Producao { get; set; }
+        [Column(TypeName = "decimal(7, 2)")]
         public decimal? Margem_Lucro { get; set; }
+        [Column(TypeName = "decimal(7, 2)")]
         public decimal Preco { get; set; }
         public int QTDE_Estoque { get; set; }
     }

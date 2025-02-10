@@ -7,12 +7,15 @@ using Pedido10.Shared.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Pedido10.Data.Context;
+using FluentValidation;
+using Pedido10.Application.Validator;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Enviroment Variables
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JWT"));
 
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUsuarioValidator>();
 // Add services to the container.
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

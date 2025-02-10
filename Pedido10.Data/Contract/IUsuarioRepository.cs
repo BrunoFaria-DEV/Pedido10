@@ -5,12 +5,13 @@ namespace Pedido10.Data.Contract
 {
     public interface IUsuarioRepository
     {
+        Task<bool> EmailExists(string email);
+        Task<bool> UpdateEmailExists(string email, int? id);
         Task<List<Usuario>> GetAll();
         Task<bool> Add(Usuario dto);
         Task<Usuario> Find(int id);
         Task<Usuario> FindByEmail(string email);
         Task<bool> Update(Usuario usuario);
-
-        //Task<List<UsuarioDto>> Paginacao(Paginacao paginacao); // estudo posterior
+        Task<bool> Delete(Usuario usuario);
     }
 }
