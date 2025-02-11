@@ -4,7 +4,7 @@ using Pedido10.Domain.Entity;
 
 namespace Pedido10.Data.Repository
 {
-    internal class CidadeRepository : ICidadeRepository
+    public class CidadeRepository : ICidadeRepository
     {
         private readonly Pedido10Context _context;
         public CidadeRepository(Pedido10Context context) 
@@ -12,9 +12,10 @@ namespace Pedido10.Data.Repository
             _context = context;
         }
 
-        public Task<Cidade> Find(int id)
+        public async Task<Cidade> Find(int id)
         {
-            throw new NotImplementedException();
+            var cidade = await _context.Cidade.FindAsync(id);
+            return cidade;
         }
 
         public Task<List<Cidade>> FindByName(string name)

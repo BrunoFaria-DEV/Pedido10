@@ -17,6 +17,9 @@ namespace Pedido10.Application.Validator
         {
             _repository = repository;
 
+            RuleFor(c => c.ID_Usuario)
+                .NotEmpty().WithMessage("Oops, temos um problema. tente novamente mais tarde, se o problema persistir contate o suporte: id faltando.");
+
             RuleFor(c => c.Nome)
                 .NotEmpty()
                 .Length(3, 120).WithMessage("O nome deve ter pelo menos 3 caracteres e no máximo 120");
@@ -26,8 +29,8 @@ namespace Pedido10.Application.Validator
                 .EmailAddress().WithMessage("Formato de e-mail inválido.")
                 .MustAsync(async (dto, email, cancellation) =>
                 {
-                    bool exists = await _repository.UpdateEmailExists(email, dto.ID_Usuario);
-                    return !exists;
+                    bool exists = await _repository.UpdateEmailExists(email, (int)dto.ID_Usuario);
+                    return !exists;                        
                 }).WithMessage("O email já foi cadastrado.");
 
             RuleFor(c => c.Senha)

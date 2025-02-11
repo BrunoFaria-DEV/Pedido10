@@ -14,6 +14,7 @@ namespace Pedido10.Domain.Dto
         public string Telefone { get; set; } = string.Empty;
         public string Endereco { get; set; } = string.Empty;
         public string? Localizador { get; set; }
-        public int ID_Cidade { get; set; }
+        public int? ID_Cidade { get; set; }
+        public string? Cidade { get; set; }
     }
 }

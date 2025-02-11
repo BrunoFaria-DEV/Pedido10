@@ -70,14 +70,14 @@ namespace Pedido10.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(UpdateUsuarioValidator validator, int id, [FromBody] UsuarioDto usuarioDto)
         {
-            usuarioDto.ID_Usuario = id;
+            usuarioDto.ID_Usuario = id; // usado até conseguir inserir outro parametro como o id no validator
             var validateResult = await validator.ValidateAsync(usuarioDto);
             var error = validateResult.Errors.Select(e => e.ErrorMessage);
             if (!validateResult.IsValid)
             {
                 return BadRequest(error);
             }
-            usuarioDto.ID_Usuario = null; // usado até conseguir inserir outro parametro como o id no validator
+            usuarioDto.ID_Usuario = null;
 
             var usuario = await _usuarioService.Update(id, usuarioDto);
             if (usuario.Success != true)

@@ -9,10 +9,12 @@ namespace Pedido10.Application.Service
     public class ClienteService : IClienteService
     {
         private readonly IClienteRepository _clienteRepository;
+        private readonly ICidadeRepository _cidadeRepository;
 
-        public ClienteService(IClienteRepository clienteRepository)
+        public ClienteService(IClienteRepository clienteRepository, ICidadeRepository cidadeRepository)
         { 
             _clienteRepository = clienteRepository;
+            _cidadeRepository = cidadeRepository;
         }
 
         public async Task<List<ClienteDto>?> GetAll()
@@ -27,6 +29,13 @@ namespace Pedido10.Application.Service
 
             foreach (var cliente in clientes)
             {
+                string clienteCidade = null;
+                if (cliente.ID_Cidade != null)
+                {
+                    var cidade = await _cidadeRepository.Find((int)cliente.ID_Cidade);
+                    clienteCidade = cidade.Nome_Cidade;
+                }
+
                 clientesDto.Add( new ClienteDto()
                 {
                     ID_Cliente = cliente.ID_Cliente,
@@ -40,6 +49,7 @@ namespace Pedido10.Application.Service
                     Endereco = cliente.Endereco,
                     Localizador = cliente.Localizador,
                     ID_Cidade = cliente.ID_Cidade,
+                    Cidade = clienteCidade ?? null,
                 });
             }
 
@@ -93,15 +103,37 @@ namespace Pedido10.Application.Service
                 Localizador = cliente.Localizador,
                 ID_Cidade = cliente.ID_Cidade,
             };
+
             return new OperationResultGeneric<ClienteDto> { Success = true, Message = $"O cliente {ClienteDtoAtualizado.Nome} foi encontrado", Result = ClienteDtoAtualizado };
         }
 
         public async Task<OperationResultGeneric<ClienteDto>> Add(ClienteDto clienteDto)
         {
             var cliente = new Cliente(clienteDto);
+            string clienteCidade = null;
+
+            if (cliente.Tipo_Pessoa == true)
+            {
+                cliente.CPF = clienteDto.CPF ?? cliente.CPF;
+                cliente.CNPJ = null;
+            }
+            else
+            {
+                cliente.CPF = null;
+                cliente.CNPJ = clienteDto.CNPJ ?? cliente.CNPJ;
+            }
+            if (cliente.ID_Cidade != null && cliente.ID_Cidade != 0)
+            {
+                var cidade = await _cidadeRepository.Find((int)cliente.ID_Cidade);
+                if (cidade == null)
+                {
+                    return new OperationResultGeneric<ClienteDto> { Success = false, Message = "O Cliente não foi adicionado. A cidade informada não pode ser encontrada." };
+                }
+                clienteCidade = cidade.Nome_Cidade;
+            }
             var addResult = await _clienteRepository.Add(cliente);
 
-            if (addResult != true)
+            if (addResult == false)
             {
                 return new OperationResultGeneric<ClienteDto> { Success = false, Message = "O Cliente não foi adicionado." };
             }
@@ -119,6 +151,7 @@ namespace Pedido10.Application.Service
                 Endereco = cliente.Endereco,
                 Localizador = cliente.Localizador,
                 ID_Cidade = cliente.ID_Cidade,
+                Cidade = clienteCidade ?? null,
             };
 
             return new OperationResultGeneric<ClienteDto> { Success = true, Message = $"O cliente {ClienteDtoAtualizado.Nome} foi incluido.", Result = ClienteDtoAtualizado };

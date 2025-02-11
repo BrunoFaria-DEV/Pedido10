@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Pedido10.Application.Contract;
+using Pedido10.Application.Validator;
 using Pedido10.Domain.Dto;
 using Pedido10.Domain.Entity;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
 namespace Pedido10.API.Controllers
@@ -60,11 +62,18 @@ namespace Pedido10.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] ClienteDto clienteDto)
+        public async Task<IActionResult> Add(CreateClienteValidator validator, [FromBody] ClienteDto clienteDto)
         {
-            if (clienteDto == null)
+            var validateResult = await validator.ValidateAsync(clienteDto);
+            var errors = validateResult.Errors
+            .GroupBy(e => e.PropertyName)  // Agrupa os erros pelo nome do campo
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(e => e.ErrorMessage).ToList()
+            );
+            if (!validateResult.IsValid)
             {
-                return BadRequest();
+                return BadRequest(new { errors });
             }
 
             var cliente = await _clienteService.Add(clienteDto);
@@ -77,11 +86,19 @@ namespace Pedido10.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] ClienteDto clienteDto)
+        public async Task<IActionResult> Update(UpdateClienteValidator validator, int id, [FromBody] ClienteDto clienteDto)
         {
-            if (clienteDto == null)
+            clienteDto.ID_Cliente = id;
+            var validateResult = await validator.ValidateAsync(clienteDto);
+            var errors = validateResult.Errors
+            .GroupBy(e => e.PropertyName)
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(e => e.ErrorMessage).ToList()
+            );
+            if (!validateResult.IsValid)
             {
-                return BadRequest();
+                return BadRequest(new { errors });
             }
 
             var cliente = await _clienteService.Update(id, clienteDto);

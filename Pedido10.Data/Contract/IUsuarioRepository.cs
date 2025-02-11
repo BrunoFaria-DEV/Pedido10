@@ -6,7 +6,7 @@ namespace Pedido10.Data.Contract
     public interface IUsuarioRepository
     {
         Task<bool> EmailExists(string email);
-        Task<bool> UpdateEmailExists(string email, int? id);
+        Task<bool> UpdateEmailExists(string email, int id);
         Task<List<Usuario>> GetAll();
         Task<bool> Add(Usuario dto);
         Task<Usuario> Find(int id);

@@ -85,7 +85,7 @@ namespace Pedido10.Data.Repository
             return await _context.Usuario.AnyAsync(usuario => usuario.Email == email);
         }
 
-        public async Task<bool> UpdateEmailExists(string email, int? id)
+        public async Task<bool> UpdateEmailExists(string email, int id)
         {
             return await _context.Usuario.AnyAsync(usuario => usuario.Email == email && usuario.ID_Usuario != id);
         }

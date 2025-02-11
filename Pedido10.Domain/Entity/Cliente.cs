@@ -63,7 +63,13 @@ namespace Pedido10.Domain.Entity
         [MaxLength(150)]
         public string Endereco { get; set; } = string.Empty;
         [MaxLength(255)]
-        public string? Localizador { get; set; }
-        public int ID_Cidade { get; set; }
+        private string? _localizador;
+        public string? Localizador
+        {
+            get => _localizador;
+            set => _localizador = string.IsNullOrWhiteSpace(value) ? null : value;
+        }
+
+        public int? ID_Cidade { get; set; }
     }
 }
