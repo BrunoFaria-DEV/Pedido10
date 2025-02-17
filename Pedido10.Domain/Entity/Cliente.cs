@@ -62,8 +62,8 @@ namespace Pedido10.Domain.Entity
         public string Telefone { get; set; } = string.Empty;
         [MaxLength(150)]
         public string Endereco { get; set; } = string.Empty;
-        [MaxLength(255)]
         private string? _localizador;
+        [MaxLength(255)]
         public string? Localizador
         {
             get => _localizador;

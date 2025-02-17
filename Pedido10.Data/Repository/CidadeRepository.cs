@@ -1,4 +1,5 @@
-﻿using Pedido10.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using Pedido10.Data.Context;
 using Pedido10.Data.Contract;
 using Pedido10.Domain.Entity;
 
@@ -10,6 +11,11 @@ namespace Pedido10.Data.Repository
         public CidadeRepository(Pedido10Context context) 
         {
             _context = context;
+        }
+
+        public async Task<List<Cidade>> GetAll()
+        {
+            return await _context.Cidade.ToListAsync();
         }
 
         public async Task<Cidade> Find(int id)

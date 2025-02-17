@@ -10,6 +10,7 @@ namespace Pedido10.Data.Contract
 {
     public interface ICidadeRepository
     {   
+        Task<List<Cidade>> GetAll();
         Task<Cidade> Find(int id);
         Task<List<Cidade>> FindByName(string name);
         Task<List<Cidade>> FindByUf(string uf);

@@ -11,9 +11,6 @@ namespace Pedido10.Application.Validator
         {
             _repository = repository;
 
-            RuleFor(c => c.ID_Cliente)
-                .NotEmpty().WithMessage("Oops, temos um problema. tente novamente mais tarde, se o problema persistir contate o suporte: id faltando.");
-
             RuleFor(c => c.Tipo_Pessoa)
                 .Must(tipo => tipo == true || tipo == false)
                 .WithMessage("O tipo do cliente é obrigatório.");
@@ -26,14 +23,14 @@ namespace Pedido10.Application.Validator
                 .NotEmpty().WithMessage("O CPF do cliente é obrigatório.")
                 .Must(c => !string.IsNullOrWhiteSpace(c))
                 .Must(c => FormatCnpjCpf.SemFormatacao(c).Length == 11).WithMessage("O CPF deve conter exatamente 11 dígitos numéricos.")
-                .Must(c => CpfCnpjUtils.IsValid(FormatCnpjCpf.SemFormatacao(c))).WithMessage("O CPF informado é inválido.")
+                //.Must(c => CpfCnpjUtils.IsValid(FormatCnpjCpf.SemFormatacao(c))).WithMessage("O CPF informado é inválido.")
                 .When(c => c.Tipo_Pessoa == true);
 
             RuleFor(c => c.CNPJ)
                 .NotEmpty().WithMessage("O CNPJ do cliente é obrigatório.")
                 .Must(c => !string.IsNullOrWhiteSpace(c))
                 .Must(c => FormatCnpjCpf.SemFormatacao(c).Length == 14).WithMessage("O CNPJ deve conter exatamente 14 dígitos numéricos.")
-                .Must(c => CpfCnpjUtils.IsValid(FormatCnpjCpf.SemFormatacao(c))).WithMessage("O CNPJ informado é inválido.")
+                //.Must(c => CpfCnpjUtils.IsValid(FormatCnpjCpf.SemFormatacao(c))).WithMessage("O CNPJ informado é inválido.")
                 .When(c => c.Tipo_Pessoa == false);
 
             RuleFor(c => c.Email)
@@ -44,6 +41,9 @@ namespace Pedido10.Application.Validator
                     bool exists = await _repository.EmailExists(email);
                     return !exists;
                 }).WithMessage("O email já foi cadastrado.");
+
+            RuleFor(c => c.Endereco)
+                .NotEmpty().WithMessage("O endereço é obrigatório.");
         }
     }
 }

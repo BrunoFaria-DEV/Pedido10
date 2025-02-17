@@ -122,11 +122,12 @@ namespace Pedido10.Application.Service
                 cliente.CPF = null;
                 cliente.CNPJ = clienteDto.CNPJ ?? cliente.CNPJ;
             }
-            if (cliente.ID_Cidade != null && cliente.ID_Cidade != 0)
+            if (cliente.ID_Cidade != null)
             {
                 var cidade = await _cidadeRepository.Find((int)cliente.ID_Cidade);
                 if (cidade == null)
                 {
+                    cliente.ID_Cidade = null;
                     return new OperationResultGeneric<ClienteDto> { Success = false, Message = "O Cliente não foi adicionado. A cidade informada não pode ser encontrada." };
                 }
                 clienteCidade = cidade.Nome_Cidade;
@@ -165,14 +166,15 @@ namespace Pedido10.Application.Service
                 return new OperationResultGeneric<ClienteDto> { Success = false, Message = "O Cliente a ser atualizado não foi encontrado." };
             }
 
-            cliente.Tipo_Pessoa = clienteDto.Tipo_Pessoa;
             if (clienteDto.Tipo_Pessoa == true)
             {
+                cliente.Tipo_Pessoa = clienteDto.Tipo_Pessoa;
                 cliente.CPF = clienteDto.CPF ?? cliente.CPF;
                 cliente.CNPJ = null;
             }
             else
             {
+                cliente.Tipo_Pessoa = clienteDto.Tipo_Pessoa;
                 cliente.CPF = null;
                 cliente.CNPJ = clienteDto.CNPJ ?? cliente.CNPJ;
             }

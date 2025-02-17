@@ -25,7 +25,10 @@ namespace Pedido10.Application.Service
                 {
                     ID_Usuario = usuario.ID_Usuario,
                     Nome = usuario.Nome,
-                    Email = usuario.Email
+                    Email = usuario.Email,
+                    Plano_Usuario = usuario.Plano_Usuario,
+                    Status = usuario.Status,
+                    Tipo_Usuario = usuario.Tipo_Usuario
                 };
             }
             return null;
@@ -85,8 +88,10 @@ namespace Pedido10.Application.Service
                 dto.Nome, 
                 dto.Email, 
                 senhaBase64, 
-                dto.Plano_Usuario, 
-                dto.Status
+                //dto.Plano_Usuario, 
+                //dto.Status
+                'D',
+                'D'
             );
 
             var resultado = await _usuarioRepository.Add(usuario);

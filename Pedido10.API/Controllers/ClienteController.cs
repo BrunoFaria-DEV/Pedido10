@@ -29,7 +29,7 @@ namespace Pedido10.API.Controllers
                 return NotFound(new { resultado = "Nenhum Cliente Cadastrado" });
             }
 
-            return Ok(new { sucesses = true, message = "Clientes encontrados", result = clientes });
+            return Ok(new { success = true, message = "Clientes encontrados", result = clientes });
         }
 
         [HttpGet("{id}")]
@@ -65,7 +65,7 @@ namespace Pedido10.API.Controllers
         public async Task<IActionResult> Add(CreateClienteValidator validator, [FromBody] ClienteDto clienteDto)
         {
             var validateResult = await validator.ValidateAsync(clienteDto);
-            var errors = validateResult.Errors
+            var validatorErrors = validateResult.Errors
             .GroupBy(e => e.PropertyName)  // Agrupa os erros pelo nome do campo
             .ToDictionary(
                 g => g.Key,
@@ -73,16 +73,23 @@ namespace Pedido10.API.Controllers
             );
             if (!validateResult.IsValid)
             {
-                return BadRequest(new { errors });
+                return BadRequest(
+                    new
+                    {
+                        type = "clienteValidatorResponse",
+                        title = "Bad Request",
+                        status = 400,
+                        errors = validatorErrors
+                    });
             }
 
             var cliente = await _clienteService.Add(clienteDto);
             if (cliente.Success != true)
             {
-                return NotFound(new { status = cliente.Success, mensagem = cliente.Message });
+                return NotFound( new { status = cliente.Success, mensagem = cliente.Message } );
             }
 
-            return Ok(new { cliente });
+            return Ok( new { cliente } );
         }
 
         [HttpPut("{id}")]
@@ -90,7 +97,7 @@ namespace Pedido10.API.Controllers
         {
             clienteDto.ID_Cliente = id;
             var validateResult = await validator.ValidateAsync(clienteDto);
-            var errors = validateResult.Errors
+            var validatorErrors = validateResult.Errors
             .GroupBy(e => e.PropertyName)
             .ToDictionary(
                 g => g.Key,
@@ -98,16 +105,16 @@ namespace Pedido10.API.Controllers
             );
             if (!validateResult.IsValid)
             {
-                return BadRequest(new { errors });
+                return BadRequest( new { status = false, mensagem = "Dados incorretos", validator = validatorErrors } );
             }
 
             var cliente = await _clienteService.Update(id, clienteDto);
             if (cliente.Success != true)
             {
-                return NotFound(new { status = cliente.Success, mensagem = cliente.Message });
+                return NotFound(new { cliente });
             }
 
-            return Ok(new { cliente });
+            return Ok( new { cliente } );
         }
 
         [HttpDelete("{id}")]
@@ -119,7 +126,7 @@ namespace Pedido10.API.Controllers
                 return NotFound(new { status = cliente.Success, mensagem = cliente.Message });
             }
 
-            return Ok(new { status = cliente.Success, mensagem = cliente.Message });
+            return Ok( new { status = cliente.Success, mensagem = cliente.Message } );
         }
     }
 }
