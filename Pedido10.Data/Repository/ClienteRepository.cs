@@ -85,9 +85,29 @@ namespace Pedido10.Data.Repository
             return await _context.Cliente.AnyAsync(cliente => cliente.Email == email);
         }
 
-        public async Task<bool> UpdateEmailExists(string email, int id)
+        public async Task<bool> UpdateEmailExists(int id, string email)
         {
             return await _context.Cliente.AnyAsync(cliente => cliente.Email == email && cliente.ID_Cliente != id);
+        }
+
+        public async Task<bool> CpfExists(string cpf)
+        {
+            return await _context.Cliente.AnyAsync(cliente => cliente.CPF == cpf);
+        }
+
+        public async Task<bool> UpdateCpfExists(int id, string cpf)
+        {
+            return await _context.Cliente.AnyAsync(cliente => cliente.CPF == cpf && cliente.ID_Cliente != id);
+        }
+
+        public async Task<bool> CnpjExists(string cnpj)
+        {
+            return await _context.Cliente.AnyAsync(cliente => cliente.CNPJ == cnpj);
+        }
+
+        public async Task<bool> UpdateCnpjExists(int id, string cnpj)
+        {
+            return await _context.Cliente.AnyAsync(cliente => cliente.CNPJ == cnpj && cliente.ID_Cliente != id);
         }
     }
 }

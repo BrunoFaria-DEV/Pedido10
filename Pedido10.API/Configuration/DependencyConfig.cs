@@ -25,6 +25,8 @@ namespace Pedido10.API.Configuration
             service.AddScoped<IProdutoRepository, ProdutoRepository>();
             service.AddScoped<ICidadeService, CidadeService>();
             service.AddScoped<ICidadeRepository, CidadeRepository>();
+            service.AddScoped<IFormaPgtoService, FormaPgtoService>();
+            service.AddScoped<IFormaPgtoRepository, FormaPgtoRepository>();
         }
     }
 }

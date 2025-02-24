@@ -53,6 +53,7 @@ namespace Pedido10.Application.Service
                     Email = usuario.Email,
                     Plano_Usuario = usuario.Plano_Usuario,
                     Status = usuario.Status,
+                    Tipo_Usuario = usuario.Tipo_Usuario
                 });
             }
 

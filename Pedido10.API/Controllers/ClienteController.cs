@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Pedido10.Application.Contract;
+using Pedido10.Application.Formater;
 using Pedido10.Application.Validator;
 using Pedido10.Domain.Dto;
 using Pedido10.Domain.Entity;
@@ -64,13 +65,18 @@ namespace Pedido10.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(CreateClienteValidator validator, [FromBody] ClienteDto clienteDto)
         {
+            clienteDto.CNPJ = clienteDto.CNPJ != null ? FormatCnpjCpf.SemFormatacao(clienteDto.CNPJ) : null;
+            clienteDto.CPF = clienteDto.CPF != null ? FormatCnpjCpf.SemFormatacao(clienteDto.CPF) : null;
+            clienteDto.Telefone = Helpers.OnlyNumbers(clienteDto.Telefone);
+
             var validateResult = await validator.ValidateAsync(clienteDto);
-            var validatorErrors = validateResult.Errors
-            .GroupBy(e => e.PropertyName)  // Agrupa os erros pelo nome do campo
-            .ToDictionary(
-                g => g.Key,
-                g => g.Select(e => e.ErrorMessage).ToList()
-            );
+            var validatorErrors = validateResult
+                .Errors
+                .GroupBy(e => e.PropertyName)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(e => e.ErrorMessage).ToList()
+                );
             if (!validateResult.IsValid)
             {
                 return BadRequest(
@@ -80,7 +86,8 @@ namespace Pedido10.API.Controllers
                         title = "Bad Request",
                         status = 400,
                         errors = validatorErrors
-                    });
+                    }
+                );
             }
 
             var cliente = await _clienteService.Add(clienteDto);
@@ -95,23 +102,33 @@ namespace Pedido10.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(UpdateClienteValidator validator, int id, [FromBody] ClienteDto clienteDto)
         {
+            clienteDto.CNPJ = clienteDto.CNPJ != null ? FormatCnpjCpf.SemFormatacao(clienteDto.CNPJ) : null;
+            clienteDto.CPF = clienteDto.CPF != null ? FormatCnpjCpf.SemFormatacao(clienteDto.CPF) : null;
+            clienteDto.Telefone = Helpers.OnlyNumbers(clienteDto.Telefone);
             clienteDto.ID_Cliente = id;
+
             var validateResult = await validator.ValidateAsync(clienteDto);
-            var validatorErrors = validateResult.Errors
-            .GroupBy(e => e.PropertyName)
-            .ToDictionary(
-                g => g.Key,
-                g => g.Select(e => e.ErrorMessage).ToList()
-            );
+            var validatorErrors = validateResult
+                .Errors
+                .GroupBy(e => e.PropertyName)
+                .ToDictionary( g => g.Key, g => g.Select(e => e.ErrorMessage).ToList());
             if (!validateResult.IsValid)
             {
-                return BadRequest( new { status = false, mensagem = "Dados incorretos", validator = validatorErrors } );
+                return BadRequest(
+                    new
+                    {
+                        type = "clienteValidatorResponse",
+                        title = "Bad Request",
+                        status = 400,
+                        errors = validatorErrors
+                    }
+                );
             }
 
             var cliente = await _clienteService.Update(id, clienteDto);
             if (cliente.Success != true)
             {
-                return NotFound(new { cliente });
+                return NotFound(new { status = cliente.Success, mensagem = cliente.Message });
             }
 
             return Ok( new { cliente } );

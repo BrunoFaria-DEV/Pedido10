@@ -28,9 +28,9 @@ namespace Pedido10.Domain.Entity
         [MaxLength(100)]
         public string Senha { get; set; } = string.Empty;
         [MaxLength(1)]
-        public char Plano_Usuario { get; set; } = 'A';
+        public char Plano_Usuario { get; set; } = 'D';
         [MaxLength(1)]
-        public char Status { get; set; } = 'A';
+        public char Status { get; set; } = 'D';
         [MaxLength(14)]
         public string Tipo_Usuario { get; set; } = "usuario";
 

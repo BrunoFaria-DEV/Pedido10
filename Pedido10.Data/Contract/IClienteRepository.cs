@@ -13,6 +13,10 @@ namespace Pedido10.Data.Contract
         Task<bool> Update(Cliente cliente);
         Task<bool> Delete(Cliente cliente);
         Task<bool> EmailExists(string email);
-        Task<bool> UpdateEmailExists(string email, int id);
+        Task<bool> UpdateEmailExists(int id, string email);
+        Task<bool> CpfExists(string cpf);
+        Task<bool> UpdateCpfExists(int id, string cpf);
+        Task<bool> CnpjExists(string cnpj);
+        Task<bool> UpdateCnpjExists(int id, string cnpj);
     }
 }
