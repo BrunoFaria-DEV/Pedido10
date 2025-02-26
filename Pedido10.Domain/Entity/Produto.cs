@@ -12,7 +12,7 @@ namespace Pedido10.Domain.Entity
         {
             ID_Produto = iD_Produto;
             Nome_Produto = nome_Produto;
-            Descricao = Descricao;
+            Descricao = descricao;
             Custo_Producao = custo_Producao;
             Margem_Lucro = margem_Lucro;
             Preco = preco;

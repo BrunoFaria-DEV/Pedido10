@@ -15,20 +15,22 @@ namespace Pedido10.Domain.Entity
 
         [Key]
         public int? ID_Pedido { get; set; }
-        [Column(TypeName = "decimal(7, 2)")]
+        [MaxLength(150)]
+        public string? Observacao { get; set; }
+        [Column(TypeName = "decimal(9, 2)")]
         public decimal VLR_Total_Pedido { get; set; }
         [MaxLength(1)]
-        public char Status_Pedido { get; set; }
+        public char Status_Entrega_Pedido { get; set; }
         public DateOnly DT_Pedido { get; set; }
-        public DateOnly? DT_Entrega { get; set; }
-        public TimeOnly? Hora_Entrega { get; set; }
+        public DateOnly DT_Entrega { get; set; }
+        public DateTime? Hora_Entrega { get; set; }
         [MaxLength(1)]
-        public char Pago { get; set; }
-
-        public int ID_Cliente { get; set; }
+        public char? Pago { get; set; }
+        [ForeignKey("Cliente")]
+        public int? ID_Cliente { get; set; }
         public Cliente Cliente { get; set; }
-
-        public int ID_Usuario { get; set; }
+        [ForeignKey("Usuario")]
+        public int? ID_Usuario { get; set; }
         public Usuario Usuario { get; set; }
 
         public ICollection<Pedido_Produto> Pedido_Produtos { get; set; } = new List<Pedido_Produto>();

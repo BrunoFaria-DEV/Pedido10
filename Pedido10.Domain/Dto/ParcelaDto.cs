@@ -2,6 +2,7 @@
 {
     public class ParcelaDto
     {
+        public int? ID_Parcela { get; set; }
         public int Numero_Parcela { get; set; }
         public DateOnly DT_Vencimento { get; set; }
         public int ID_Forma_PGTO { get; set; }

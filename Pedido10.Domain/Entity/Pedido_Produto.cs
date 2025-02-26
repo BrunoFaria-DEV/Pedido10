@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Pedido10.Domain.Entity
 {
@@ -7,10 +8,11 @@ namespace Pedido10.Domain.Entity
     {
         [Key]
         public int? ID_Pedido_Produto { get; set; }
-
+        [ForeignKey("Pedido")]
         public int ID_Pedido { get; set; }
+        [JsonIgnore]
         public Pedido Pedido { get; set; }
-
+        [ForeignKey("Produto")]
         public int ID_Produto { get; set; }
         public Produto? Produto { get; set; }
 

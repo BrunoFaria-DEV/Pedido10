@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Pedido10.Domain.Entity
 {
@@ -25,10 +26,13 @@ namespace Pedido10.Domain.Entity
         public decimal? Valor_Pago_Parcela { get; set; }
 
         // Relação com Pedido
+        [ForeignKey("Pedido")]
         public int ID_Pedido { get; set; }
+        [JsonIgnore]
         public Pedido Pedido { get; set; }
 
         // Relação com Forma_PGTO
+        [ForeignKey("Forma_PGTO")]
         public int ID_Forma_PGTO { get; set; }
         public Forma_PGTO? Forma_PGTO { get; set; }
     }
