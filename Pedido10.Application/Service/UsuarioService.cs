@@ -95,6 +95,11 @@ namespace Pedido10.Application.Service
                 'D'
             );
 
+            if (dto.Tipo_Usuario == "admin" || dto.Tipo_Usuario == "usuario")
+            {
+                usuario.Tipo_Usuario = dto.Tipo_Usuario;
+            }
+
             var resultado = await _usuarioRepository.Add(usuario);
             if (resultado != true)
             {
@@ -113,7 +118,16 @@ namespace Pedido10.Application.Service
             }
 
             usuario.Nome = dto.Nome ?? usuario.Nome;
-            usuario.Email = dto.Email ?? usuario.Email;
+
+            if (usuario.ID_Usuario != 1 && usuario.Email != "admin@admin.com")
+            {
+                usuario.Email = dto.Email ?? usuario.Email;
+                if (dto.Tipo_Usuario == "admin" || dto.Tipo_Usuario == "usuario")
+                {
+                    usuario.Tipo_Usuario = dto.Tipo_Usuario;
+                }
+            }
+
             usuario.Status = dto.Status ?? usuario.Status;
             if (!String.IsNullOrEmpty(dto.Senha))
             {
@@ -137,6 +151,11 @@ namespace Pedido10.Application.Service
             if (usuario == null)
             {
                 return new OperationResultGeneric<UsuarioDto> { Success = false, Message = "Não foi Possivel excluir o Usuario pois não foi encontrado." };
+            }
+
+            if (usuario.Email == "admin@admin.com" || usuario.Tipo_Usuario == "admin")
+            {
+                return new OperationResultGeneric<UsuarioDto> { Success = false, Message = "Não foi Possivel excluir o Usuario é administrador." };
             }
 
             var resultado = await _usuarioRepository.Delete(usuario);

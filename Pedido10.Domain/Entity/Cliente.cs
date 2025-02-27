@@ -51,9 +51,9 @@ namespace Pedido10.Domain.Entity
         public Boolean Tipo_Pessoa { get; set; }
         [MaxLength(100)]
         public string Nome { get; set; } = string.Empty;
-        [MaxLength(14)]
+        [MaxLength(11)]
         public string? CPF { get; set; } = string.Empty;
-        [MaxLength(18)]
+        [MaxLength(14)]
         public string? CNPJ { get; set; } = string.Empty;
         public DateOnly? Nascimento { get; set; }
         [MaxLength(50)]

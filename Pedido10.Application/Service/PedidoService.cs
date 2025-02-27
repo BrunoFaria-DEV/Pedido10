@@ -38,19 +38,72 @@ namespace Pedido10.Application.Service
                     DT_Entrega = pedido.DT_Entrega,
                     Hora_Entrega = pedido.Hora_Entrega,
                     ID_Cliente = pedido.ID_Cliente,
+
                     Pedido_Produtos = pedido.Pedido_Produtos.Select(pp => new PedidoProdutoDto
                     {
                         ID_Produto = pp.Produto.ID_Produto,
+                        QTDE_Produto = pp.QTDE_Produto,
+                        VLR_Unitario_Produto = pp.VLR_Unitario_Produto,
+                        VLR_Total_Produto = pp.VLR_Total_Produto
                     }).ToList(),
+
                     Parcelas = pedido.Parcelas.Select(pa => new ParcelaDto
                     {
                         ID_Parcela = pa.ID_Parcela,
-                        Valor_Parcela = pa.Valor_Parcela
+                        Numero_Parcela = pa.Numero_Parcela,
+                        DT_Vencimento = pa.DT_Vencimento,
+                        ID_Forma_PGTO = pa.ID_Forma_PGTO,
+                        Valor_Parcela = pa.Valor_Parcela,
+                        Status_Parcela = pa.Status_Parcela,
+                        Valor_Pago_Parcela = pa.Valor_Pago_Parcela,
+                        Data_Pagamento = pa.Data_Pagamento
                     }).ToList(),
                 });
             }
 
             return listPedidoDto;
+        }
+
+        public async Task<PedidoDto> Find(int id)
+        {
+            var pedido = await _pedidoRepository.Find(id);
+            if (pedido == null)
+            {
+                return null;
+            }
+
+            PedidoDto pedidoDto = new PedidoDto()
+            {
+                ID_Pedido = pedido.ID_Pedido,
+                VLR_Total_Pedido = pedido.VLR_Total_Pedido,
+                Status_Entrega_Pedido = pedido.Status_Entrega_Pedido,
+                DT_Pedido = pedido.DT_Pedido,
+                DT_Entrega = pedido.DT_Entrega,
+                Hora_Entrega = pedido.Hora_Entrega,
+                ID_Cliente = pedido.ID_Cliente,
+
+                Pedido_Produtos = pedido.Pedido_Produtos.Select(pp => new PedidoProdutoDto
+                {
+                    ID_Produto = pp.Produto.ID_Produto,
+                    QTDE_Produto = pp.QTDE_Produto,
+                    VLR_Unitario_Produto = pp.VLR_Unitario_Produto,
+                    VLR_Total_Produto = pp.VLR_Total_Produto
+                }).ToList(),
+
+                Parcelas = pedido.Parcelas.Select(pa => new ParcelaDto
+                {
+                    ID_Parcela = pa.ID_Parcela,
+                    Numero_Parcela = pa.Numero_Parcela,
+                    DT_Vencimento = pa.DT_Vencimento,
+                    ID_Forma_PGTO = pa.ID_Forma_PGTO,
+                    Valor_Parcela = pa.Valor_Parcela,
+                    Status_Parcela = pa.Status_Parcela,
+                    Valor_Pago_Parcela = pa.Valor_Pago_Parcela,
+                    Data_Pagamento = pa.Data_Pagamento
+                }).ToList(),
+            };
+
+            return pedidoDto;
         }
 
         public async Task<Pedido> CriarPedidoAsync(PedidoCreateDto dto)
@@ -98,6 +151,25 @@ namespace Pedido10.Application.Service
             }
             
             return await _pedidoRepository.AdicionarPedidoAsync(pedido);
+        }
+
+        public async Task<Pedido?> EditarPedidoAsync(int id, PedidoCreateDto dto)
+        {
+            var pedidoExistente = await _pedidoRepository.Find(id);
+            if (pedidoExistente == null)
+            {
+                return null; // Retorna null caso o pedido não seja encontrado
+            }
+
+            // Atualiza os dados principais do pedido
+            pedidoExistente.ID_Cliente = dto.ID_Cliente;
+            pedidoExistente.DT_Entrega = dto.DT_Entrega;
+            pedidoExistente.Status_Entrega_Pedido = dto.Status_Entrega_Pedido;
+
+            // Atualiza os produtos e parcelas
+            await _pedidoRepository.AtualizarProdutosEPacelas(pedidoExistente, dto);
+
+            return pedidoExistente;
         }
 
         public async Task<bool> Delete(int id)

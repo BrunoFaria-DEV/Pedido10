@@ -23,6 +23,9 @@ namespace Pedido10.Domain.Dto
         // Relacionamento com Cliente
         public int? ID_Cliente { get; set; }
 
+        // propriedade extra para evitar dupla requisição no front-end
+        public string? nomeCliente { get; set; }
+
         // Relacionamento com Pedido_Produto
         public List<PedidoProdutoDto> Pedido_Produtos { get; set; } = new();
 

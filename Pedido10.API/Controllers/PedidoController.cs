@@ -29,6 +29,18 @@ namespace Pedido10.API.Controllers
             return Ok(new { sucesses = true, message = "Pedidos encontrados", result = pedidos });
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Find(int id)
+        {
+            var pedido = await _pedidoService.Find(id);
+            if (pedido == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new { sucesses = true, message = "Pedidos encontrados", result = pedido });
+        }
+
         [HttpPost]
         public async Task<IActionResult> CriarPedido([FromBody] PedidoCreateDto pedidoDTO)
         {
@@ -37,6 +49,19 @@ namespace Pedido10.API.Controllers
 
             Pedido pedidoCriado = await _pedidoService.CriarPedidoAsync(pedidoDTO);
             return CreatedAtAction(nameof(CriarPedido), new { id = pedidoCriado.ID_Pedido }, pedidoCriado);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Edit(int id, [FromBody] PedidoCreateDto pedidoDTO)
+        {
+            var pedidoAtualizado = await _pedidoService.EditarPedidoAsync(id, pedidoDTO);
+
+            if (pedidoAtualizado == null)
+            {
+                return NotFound(new { resultado = "Pedido não encontrado" });
+            }
+
+            return Ok(new { success = true, message = "Pedido atualizado com sucesso", result = pedidoAtualizado });
         }
 
         [HttpDelete("{id}")]
