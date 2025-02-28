@@ -117,7 +117,9 @@ namespace Pedido10.Application.Service
                 DT_Pedido = DateOnly.FromDateTime(DateTime.UtcNow),
                 DT_Entrega = dto.DT_Entrega,
                 Status_Entrega_Pedido = dto.Status_Entrega_Pedido,
+                VLR_Total_Pedido = dto.VLR_Total_Pedido,
                 Pago = 'D',
+
                 Pedido_Produtos = dto.Pedido_Produtos.Select(p => new Pedido_Produto
                 {
                     ID_Produto = (int)p.ID_Produto,
@@ -125,6 +127,7 @@ namespace Pedido10.Application.Service
                     VLR_Unitario_Produto = p.VLR_Unitario_Produto,
                     VLR_Total_Produto = p.VLR_Total_Produto
                 }).ToList(),
+
                 Parcelas = dto.Parcelas.Select(p => new Parcela
                 {
                     Numero_Parcela = p.Numero_Parcela,
@@ -145,6 +148,7 @@ namespace Pedido10.Application.Service
                 }
                 calculoTotal += parcela.Valor_Parcela;
             }
+            pedido.VLR_Total_Pedido = calculoTotal;
             if (pedido.Parcelas.Count == parcelasPagas)
             {
                 pedido.Pago = 'P';
@@ -158,15 +162,14 @@ namespace Pedido10.Application.Service
             var pedidoExistente = await _pedidoRepository.Find(id);
             if (pedidoExistente == null)
             {
-                return null; // Retorna null caso o pedido não seja encontrado
+                return null;
             }
 
-            // Atualiza os dados principais do pedido
             pedidoExistente.ID_Cliente = dto.ID_Cliente;
             pedidoExistente.DT_Entrega = dto.DT_Entrega;
             pedidoExistente.Status_Entrega_Pedido = dto.Status_Entrega_Pedido;
+            pedidoExistente.VLR_Total_Pedido = dto.VLR_Total_Pedido;
 
-            // Atualiza os produtos e parcelas
             await _pedidoRepository.AtualizarProdutosEPacelas(pedidoExistente, dto);
 
             return pedidoExistente;

@@ -16,7 +16,7 @@ namespace Pedido10.Data.Repository
 
         public async Task<List<Cliente>> GetAll()
         {
-            var clientes = await _context.Cliente.ToListAsync();
+            var clientes = await _context.Cliente.OrderByDescending(cliente => cliente.ID_Cliente).ToListAsync();
 
             return clientes;
         }

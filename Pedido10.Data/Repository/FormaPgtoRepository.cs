@@ -16,7 +16,7 @@ namespace Pedido10.Data.Repository
 
         public async Task<List<Forma_PGTO>> GetAll() 
         {
-            var formaPgtos = await _context.Forma_PGTO.ToListAsync();
+            var formaPgtos = await _context.Forma_PGTO.OrderBy(pgto => pgto.ID_Forma_PGTO).ToListAsync();
  
             return formaPgtos;
         }

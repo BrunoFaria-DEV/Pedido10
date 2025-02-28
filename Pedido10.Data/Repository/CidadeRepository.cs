@@ -15,7 +15,7 @@ namespace Pedido10.Data.Repository
 
         public async Task<List<Cidade>> GetAll()
         {
-            return await _context.Cidade.ToListAsync();
+            return await _context.Cidade.OrderBy(cidade => cidade.UF).ToListAsync();
         }
 
         public async Task<Cidade> Find(int id)

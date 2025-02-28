@@ -16,7 +16,7 @@ namespace Pedido10.Data.Repository
 
         public async Task<List<Produto>> GetAll()
         {
-            var produtos = await _context.Produto.ToListAsync();
+            var produtos = await _context.Produto.OrderByDescending(produto => produto.ID_Produto).ToListAsync();
             return produtos;
         }
 

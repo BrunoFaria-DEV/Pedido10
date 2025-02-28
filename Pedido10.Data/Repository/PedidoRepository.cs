@@ -22,6 +22,7 @@ namespace Pedido10.Data.Repository
                     .ThenInclude(pp => pp.Produto)
                 .Include(p => p.Parcelas)
                     .ThenInclude(pa => pa.Forma_PGTO)
+                .OrderByDescending(p => p.ID_Pedido)
                 .ToListAsync();
 
             return pedidos;
